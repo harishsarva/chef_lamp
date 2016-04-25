@@ -1,0 +1,101 @@
+<?php
+
+  if(isset($_POST['on'])) {
+
+  
+    
+    $servername = "<%= node['apache_php']['database']['host'] %>";
+$username = "<%= node['apache_php']['database']['admin_username'] %>";
+    $password = "<%= @database_password %>";
+    $dbname = "<%= node['apache_php']['database']['dbname'] %>";
+
+    // Create connection
+     $conn = new mysqli($servername, $username, $password, $dbname);
+     $queries = "select * from customers";
+     $result = mysqli_query($conn, $queries);
+     while($row = mysqli_fetch_array($result))
+     {
+     echo "<table><tr><th>ID</th><th>firstname</th><th>lastname</th><th>mail</th><th>zipcode</th><th>timecreated</th></tr>";
+     // output data of each row
+     while($row = $result->fetch_assoc()) {
+      echo "<tr><td>" . $row["id"]. "</td><td>" . $row["firstname"]. "</td><td> " . $row["lastname"]. "</td><td>" . $row["email"]. "</td><td> " . $row["zipcode"]. "</td><td> " . $row["timecreated"]. "</td></tr>" ;
+     }
+     echo "</table>";
+     }
+
+
+    }
+
+
+
+  if(isset($_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['zipcode'])) {
+        //...use variables to store GET array values
+                $fname = $_POST['firstname'];
+                $lname= $_POST['lastname'];
+                                $email= $_POST['email'];
+                                $zipcode=$_POST['zipcode'];
+echo " your details $fname , $lname , $email, $zipcode --";
+    $servername = "<%= node['apache_php']['database']['host'] %>";
+$username = "<%= node['apache_php']['database']['admin_username'] %>";
+    $password = "<%= @database_password %>";
+    $dbname = "<%= node['apache_php']['database']['dbname'] %>";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+else {
+$con = mysqli_connect($servername, $username, $password, $dbname);
+$query1 = "SELECT * FROM customers WHERE email = '$email'";
+$result = mysqli_query($con,$query1);
+$sql = "INSERT INTO customers (firstname,lastname,email,zipcode,timecreated)
+VALUES ( '$fname', '$lname','$email',$zipcode,NOW())";
+
+$numrows =  mysqli_num_rows($result);
+ //echo " -- we have  $numrows emails in our database already";
+    if (mysqli_num_rows($result) > 0){
+    echo " -- we have  $numrows accounts with this email in our database already";
+     echo "user/email already exist, Please use another email";
+    }
+    else {
+    if ($conn->query($sql) === TRUE) {
+    echo "Values inserted into database successfully";
+ }  else {
+   // echo "connection error";
+    }
+    }
+}
+    }
+
+//$conn->close();
+
+?>
+
+<html>
+
+<style>
+table, th, td {
+     border: 1px solid black;
+}
+</style>
+</head>
+
+
+<form  action="index.php" method="POST">
+  First name:<br>
+  <input type="text" name="firstname" pattern="[A-Za-z]{3,8}" title="min 3 max8 chars." required><br>
+  Last name:<br>
+  <input type="text" name="lastname" pattern="[A-Za-z]{3,8}" title="min 3 max8 chars." required><br>
+  E-mail Address:<br>
+  <input type="email" name="email" required><br>
+  Zip Code:<br>
+  <input type="number" name="zipcode" pattern="[0-9]{5}" title="5 digits" required><br>
+  <input type="submit" value="sineup" name="Submit"/>
+  
+</form>
+<form action="index.php" method="POST">
+<input type="submit" name="on" value="list users"/>
+</form>
+
+</html>
