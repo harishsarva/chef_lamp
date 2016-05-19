@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <pluginGroups>
+    </pluginGroups>
+
+    <proxies>
+        <proxy>
+            <id>COF-proxy</id>
+            <active>true</active>
+            <protocol>http</protocol>
+            <host>proxy.kdc.capitalone.com</host>
+            <port>8099</port>
+            <username>COF\youreid</username>
+            <password>yourpass</password>
+            <nonProxyHosts>10.0.0.0/8</nonProxyHosts>
+        </proxy>
+        <proxy>
+            <id>COF-proxy</id>
+            <active>false</active>
+            <protocol>https</protocol>
+            <host>proxy.kdc.capitalone.com</host>
+            <port>8099</port>
+            <username>COF\youreid</username>
+            <password>yourpass</password>
+            <nonProxyHosts>10.0.0.0/8</nonProxyHosts>
+        </proxy>
+    </proxies>
+</settings>
